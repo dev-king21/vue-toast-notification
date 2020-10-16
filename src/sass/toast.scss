@@ -1,0 +1,303 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700");
+body,
+html {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+    height: 100vh;
+}
+
+
+/*
+** Component
+*/
+
+$root: ".el-toast";
+$transition-default: cubic-bezier(0.5,
+0,
+0.1,
+1);
+$transition-in: cubic-bezier(0,
+0,
+0.25,
+1);
+$transition-out: cubic-bezier(0.25,
+0,
+1,
+1);
+#{$root} {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 16px;
+    opacity: 1;
+    padding: 0 0 10px;
+    position: fixed;
+    right: 0;
+    transition: opacity 150ms $transition-default;
+    width: 350px;
+    &--paused {
+        opacity: 0.9;
+    }
+    button {
+        &,
+        &:focus,
+        &:hover {
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
+            outline: none;
+        }
+    }
+    &__item:not(:first-child) {
+        margin-top: 8px;
+    }
+    &__item:nth-child(n+4) {
+        bottom: 0;
+        max-height: 40px;
+        position: absolute;
+        #{$root}__icon,
+        #{$root}__progress,
+        #{$root}__description,
+        #{$root}__action {
+            opacity: 0;
+        }
+    }
+    &__item:nth-child(n+6) {
+        opacity: 0;
+        transform: translateY(0) scale(0.85);
+        z-index: 1970;
+    }
+    &__item:nth-child(4) {
+        background-color: #595959;
+        transform: translateY(-4px) scale(0.95);
+        z-index: 1990;
+    }
+    &__item:nth-child(5) {
+        background-color: #767676;
+        transform: translateY(0) scale(0.9);
+        z-index: 1980;
+    }
+    &__item {
+        animation: append-in 300ms $transition-in forwards;
+        background-color: #222222;
+        border-radius: 2px;
+        color: #fff;
+        display: grid;
+        grid-template: [header] "icon description close"auto [body] "icon action close"auto [footer] "progress progress progress"auto / 38px 1fr 38px;
+        max-height: 400px;
+        overflow: hidden;
+        position: relative;
+        transform-origin: center bottom;
+        transition: transform 300ms $transition-in, background 300ms $transition-in, opacity 300ms $transition-in, max-height 300ms $transition-in;
+        user-select: none;
+        width: 100%;
+        z-index: 2000;
+        @keyframes append-in {
+            from {
+                max-height: 0;
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+        @keyframes append-out {
+            to {
+                max-height: 0;
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+        &--danger {
+            #{$root} {
+                &__action,
+                &__description,
+                &__icon {
+                    button,
+                    a,
+                    i {
+                        color: #DF6962;
+                    }
+                }
+                &__bar {
+                    background-color: #D64038;
+                }
+            }
+        }
+        &--alert {
+            #{$root} {
+                &__action,
+                &__description,
+                &__icon {
+                    button,
+                    a,
+                    i {
+                        color: #F3CC6B;
+                    }
+                }
+                &__bar {
+                    background-color: #EFBC3C;
+                }
+            }
+        }
+        &--success {
+            #{$root} {
+                &__action,
+                &__description,
+                &__icon {
+                    button,
+                    a,
+                    i {
+                        color: #54A668;
+                    }
+                }
+                &__bar {
+                    background-color: #54A668;
+                }
+            }
+        }
+        &--info {
+            #{$root} {
+                &__action,
+                &__description,
+                &__icon {
+                    button,
+                    a,
+                    i {
+                        color: #71C3DD;
+                    }
+                }
+                &__bar {
+                    background-color: #48B1D3;
+                }
+            }
+        }
+        &--removing {
+            animation: append-out 300ms $transition-out forwards;
+        }
+    }
+    &__icon {
+        display: flex;
+        font-size: 1.4rem;
+        grid-area: icon;
+        justify-content: center;
+        padding: 12px 8px 12px 12px;
+    }
+    &__description {
+        font-size: 1.3rem;
+        grid-area: description;
+        line-height: 1.5;
+        margin: 10px 0;
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 0 8px;
+        button {
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+    }
+    &__close {
+        display: flex;
+        font-size: 1.4rem;
+        grid-area: close;
+        justify-content: center;
+        button {
+            color: #fff;
+            display: block;
+            height: 38px;
+            padding: 10px 8px 8px;
+            text-align: center;
+            width: 100%;
+        }
+    }
+    &__action {
+        grid-column: action;
+        button,
+        a {
+            display: inline-block;
+            font-size: 1.3rem;
+            padding: 0 8px 10px;
+            text-transform: uppercase;
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+    }
+    &__progress {
+        background-color: transparentize(#E1E3E6, 0.85);
+        grid-column: progress;
+        height: 4px;
+        width: 100%;
+        z-index: 20;
+        &--hide {
+            display: none;
+        }
+    }
+    &__bar {
+        bottom: 0;
+        display: block;
+        height: 4px;
+        position: absolute;
+        transition: width 100ms $transition-default;
+        width: 100%;
+        z-index: 10;
+    }
+    // Ignore
+    &--example {
+        left: calc(50% - 175px);
+        right: 0;
+        top: calc(50% - 33px);
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    #{$root} {
+        margin: 16px 0;
+        max-height: 400px;
+        padding: 10px 0px;
+        width: 100%;
+        &__item {
+            width: calc(100% - 30px);
+        }
+        &__item:not(:first-child) {
+            margin-top: 8px;
+        }
+        &__item:nth-child(n+2) {
+            bottom: 0;
+            max-height: 40px;
+            position: absolute;
+            #{$root}__icon,
+            #{$root}__progress,
+            #{$root}__description,
+            #{$root}__action {
+                opacity: 0;
+            }
+        }
+        &__item:nth-child(n+4) {
+            opacity: 0;
+            transform: translateY(0) scale(0.9);
+            z-index: 1970;
+        }
+        &__item:nth-child(2) {
+            background-color: #595959;
+            transform: translateY(-4px) scale(0.95);
+            width: calc(100% - 60px);
+            z-index: 1990;
+        }
+        &__item:nth-child(3) {
+            background-color: #767676;
+            transform: translateY(0) scale(0.9);
+            width: calc(100% - 60px);
+            z-index: 1980;
+        }
+        // Ignore
+        &--example {
+            left: 0;
+            top: calc(50% - 33px);
+        }
+    }
+}
